@@ -1,16 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Card} from './card';
 import {FormControl} from '@angular/forms';
-import {Subscription} from 'rxjs';
 
-const maxPairs = 2;
+const minPairs = 3;
+const maxPairs = 50;
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
   cards: Card[];
   completed = false;
   maxPairsControl: FormControl;
@@ -18,14 +18,8 @@ export class AppComponent implements OnInit, OnDestroy {
   // private maxPairsSubscriber: Subscription;
 
   ngOnInit(): void {
-    this.maxPairsControl = new FormControl(maxPairs);
+    this.maxPairsControl = new FormControl(minPairs);
     this.shuffle();
-
-    // this.maxPairsSubscriber = this.maxPairsControl.valueChanges.subscribe(val => {
-    //   if (this.maxPairsControl.valid) {
-    //     this.shuffle();
-    //   }
-    // });
   }
 
   private checkCompletion() {
@@ -65,8 +59,13 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+  nextLevel() {
+    this.maxPairsControl.setValue(this.maxPairsControl.value + 3);
+    this.shuffle();
+  }
+
   shuffle() {
-    const maxPears = Math.max(this.maxPairsControl.value, maxPairs);
+    const maxPears = Math.min(maxPairs, Math.max(this.maxPairsControl.value, minPairs));
 
     this.completed = false;
     this.cards = [];
@@ -86,9 +85,5 @@ export class AppComponent implements OnInit, OnDestroy {
       const j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
       [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]]; // swap elements
     }
-  }
-
-  ngOnDestroy(): void {
-    // this.maxPairsSubscriber.unsubscribe();
   }
 }
