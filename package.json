@@ -6,7 +6,8 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng build --prod && node index.js",
+    "postinstall": "ng build --prod",
+    "start": "node index.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -14,6 +15,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cli": "~7.3.8",
     "@angular/animations": "~7.2.0",
     "@angular/common": "~7.2.0",
     "@angular/compiler": "~7.2.0",
@@ -30,7 +32,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.13.0",
-    "@angular/cli": "~7.3.8",
+
     "@angular/compiler-cli": "~7.2.0",
     "@angular/language-service": "~7.2.0",
     "@types/node": "~8.9.4",
