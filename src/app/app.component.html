@@ -1,6 +1,8 @@
-<div>
-  <button (click)="shuffle()">shuffle</button>
+<div class="toolbar">
+  <input type="number" min="2" max="50" [formControl]="maxPairsControl"/>
+  <button class="btn" (click)="shuffle()">Shuffle</button>
 </div>
+
 
 <div class="board">
   <ng-template ngFor let-card [ngForOf]="cards">
@@ -8,3 +10,4 @@
   </ng-template>
 </div>
 
+<app-finish-banner *ngIf="completed" (click)="shuffle()">ng serve</app-finish-banner>

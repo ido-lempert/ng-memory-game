@@ -1,8 +1,9 @@
 :host {
+  --card-width: calc(var(--max-board-width) / var(--max-cards-per-row));
   cursor: pointer;
   display: block;
-  width: 340px;
-  height: 530px;
+  width: var(--card-width);
+  height: calc(var(--card-width) * var(--card-ratio-size));
   //background-color: red;
   perspective: 1000px;
 

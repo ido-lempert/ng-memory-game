@@ -1,18 +1,46 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Card} from './card';
+import {FormControl} from '@angular/forms';
+import {Subscription} from 'rxjs';
+
+const maxPairs = 2;
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   cards: Card[];
-
-  private flipedCard: Card;
+  completed = false;
+  maxPairsControl: FormControl;
+  private flippedCard: Card;
+  // private maxPairsSubscriber: Subscription;
 
   ngOnInit(): void {
+    this.maxPairsControl = new FormControl(maxPairs);
     this.shuffle();
+
+    // this.maxPairsSubscriber = this.maxPairsControl.valueChanges.subscribe(val => {
+    //   if (this.maxPairsControl.valid) {
+    //     this.shuffle();
+    //   }
+    // });
+  }
+
+  private checkCompletion() {
+    let completed = true;
+
+    for (const card of this.cards) {
+      if (! card.flipped) {
+        completed = false;
+        break;
+      }
+    }
+
+    setTimeout(() => {
+      this.completed = completed;
+    }, 1000);
   }
 
   flip(card: Card) {
@@ -21,26 +49,29 @@ export class AppComponent implements OnInit {
     }
 
     card.flipped = true;
-    if (this.flipedCard) {
-      if (this.flipedCard.frontImageUrl === card.frontImageUrl) {
-        // TODO: check finish
-        this.flipedCard = undefined;
+    if (this.flippedCard) {
+      if (this.flippedCard.frontImageUrl === card.frontImageUrl) {
+        this.checkCompletion();
+        this.flippedCard = undefined;
       } else {
         setTimeout(() => {
           // TODO :: fix race condition
-          this.flipedCard.flipped = card.flipped = false;
-          this.flipedCard = undefined;
+          this.flippedCard.flipped = card.flipped = false;
+          this.flippedCard = undefined;
         }, 300);
       }
     } else {
-      this.flipedCard = card;
+      this.flippedCard = card;
     }
   }
 
   shuffle() {
+    const maxPears = Math.max(this.maxPairsControl.value, maxPairs);
+
+    this.completed = false;
     this.cards = [];
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= maxPears; i++) {
       for (let j = 0; j < 2; j++) {
         const card = {
           flipped: false,
@@ -55,5 +86,9 @@ export class AppComponent implements OnInit {
       const j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
       [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]]; // swap elements
     }
+  }
+
+  ngOnDestroy(): void {
+    // this.maxPairsSubscriber.unsubscribe();
   }
 }
