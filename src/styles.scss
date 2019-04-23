@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Luckiest+Guy");
 
-$size-xs: 480px;
+$size-xs: 320px;
 $size-sm: 768px;
 $size-md: 992px;
 $size-lg: 1200px;
@@ -11,7 +11,7 @@ $size-lg: 1200px;
   --card-ratio-size: calc(530 / 340);
 
   @media only screen and (max-width: $size-sm) {
-    --max-board-width: 480px;
+    --max-board-width: 320px;
     --max-cards-per-row: 3;
   }
 
