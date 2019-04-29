@@ -4,6 +4,7 @@
   "engines": {
     "node": "10.x"
   },
+
   "scripts": {
     "ng": "ng",
     "postinstall": "ng build --prod",
